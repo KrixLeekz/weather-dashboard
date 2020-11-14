@@ -29,9 +29,7 @@
 
                         </div>
                         <div class="btn-group-vertical w-100" id="buttons">
-                            <button class="btn btn-secondary" type="button">New York</button>
-                            <button class="btn btn-secondary" type="button">Los Angeles</button>
-                            <button class="btn btn-secondary" type="button">Charlotte</button>
+                            <!--Buttons Generated Here-->
                         </div>
                     </div>
                 </div>
@@ -62,9 +60,10 @@
        var cityDisplay
 
        function displayWeather() {
-        var city;
-        var queryURL;
+        var city = $(this).attr("data-name")
+        var queryURL = "api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=5ff00304a5e6e6ea0317fe23f025312e"
 
+        //ajac call to get city weather information
         $.ajax({
           url: queryURL,
           method: "GET"
@@ -73,10 +72,16 @@
         });
        }
 
-       function renderButtons(){
-           $("buttons").empty();
+       function renderButtons() {
+            //empties the buttons to prevent repeats
+           $("#buttons").empty();
+            //Dynamically creates new buttons for each city in the cities array
            for(let i = 0; i < cities.length; i++){
-
+            var newButton = $("<button>")
+            newButton.addClass("btn btn-secondary")
+            newButton.attr("data-name", cities[i])
+            newButton.text(cities[i])
+            $("#buttons").append(newButton)
            }
        }
 

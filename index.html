@@ -21,10 +21,10 @@
                     <h5 class="card-header">Search Cities</h5>
                     <div class="card-body">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Search Cities" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <input type="text" class="form-control" id="city-input" placeholder="Search Cities" aria-label="Recipient's username" aria-describedby="basic-addon2">
 
                             <div class="input-group-append">
-                              <button class="btn btn-primary" type="button">Search</button>
+                              <button class="btn btn-primary" id="add-city" type="button">Search</button>
                             </div>
 
                         </div>
@@ -68,6 +68,7 @@
           url: queryURL,
           method: "GET"
         }).then(function(response) {
+            var holdDiv = $("<div>")
 
         });
        }
@@ -78,13 +79,23 @@
             //Dynamically creates new buttons for each city in the cities array
            for(let i = 0; i < cities.length; i++){
             var newButton = $("<button>")
-            newButton.addClass("btn btn-secondary")
+            newButton.addClass("city btn btn-secondary")
             newButton.attr("data-name", cities[i])
             newButton.text(cities[i])
             $("#buttons").append(newButton)
            }
        }
 
+       $("#add-city").on("click", function(e) {
+        //Just in case
+        event.preventDefault()
+        //pushes input value into cities array
+        var city = $("#city-input").val().trim()
+        cities.push(city)
+        renderButtons()
+       })
+
+       $(document).on("click", ".city", displayWeather)
        renderButtons()
 
     });

@@ -60,6 +60,9 @@
        var cityDisplay = $("#city-name")
        var cityWeather = $("#weather-results")
 
+       var holdDiv = $("<div>")
+       cityWeather.append(holdDiv)
+
        function displayWeather() {
         cityDisplay.text($(this).attr("data-name"))
         var city = $(this).attr("data-name")
@@ -70,9 +73,36 @@
           url: queryURL,
           method: "GET"
         }).then(function(response) {
-            var holdDiv = $("<div>")
+            //empties previous information
+            holdDiv.empty()
+
+            var Temp = $("<p>")
+            Temp.text("Temperature: " + response.main.temp.toFixed(1) + "°F")
+            holdDiv.append(Temp)
+
+            var Hum = $("<p>")
+            Hum.text("Humidity: " + response.main.humidity + "%")
+            holdDiv.append(Hum)
+
+            var Wind = $("<p>")
+            Wind.text("Wind Speed: " + response.wind.speed.toFixed(1) + " MPH")
+            holdDiv.append(Wind)
+
+            //This is a declaration of latitude and longitude in order to make a second ajax call with the proper parameters
+            var lat = response.coord.lat
+            var lon = response.coord.lon
+            //Second ajax call for UV index
+            $.ajax({
+                url: "https://api.openweathermap.org/data/2.5/uvi?" + "lat=" + lat + "&lon=" + lon + "&units=imperial&appid=5ff00304a5e6e6ea0317fe23f025312e",
+                method: "GET"
+            }).then(function(r){
+                console.log(r)
+                var UV = $("<p>")
+                UV.text("UV index: " + r.value)
+                holdDiv.append(UV)
+            })
+
             console.log(response)
-            console.log(response.name)
         });
        }
 
